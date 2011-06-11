@@ -23,7 +23,7 @@ except ImportError:  # pragma: no cover
 from api_key import API_KEY
 
 
-class ExampleWrapper(object):
+class API(object):
     """An example class for a Python API wrapper."""
 
     def __init__(self, api_key=''):
@@ -31,15 +31,12 @@ class ExampleWrapper(object):
             self.api_key = API_KEY
         else:
             self.api_key = api_key
-        # Change the base_url.
-        self.base_url = 'http://something.web'
+        self.base_url = ''
 
-    def api(self, directory, **kwargs):
+    def call_api(self, directory, **kwargs):
         """
         A generic example api wrapping method. Other methods can use this
         method to interact with the API.
-
-        >>> ExampleWrapper('my_api_key').api('location', q='foo')
         """
         url_list = [self.base_url]
         url_list.append('/%s' % directory)
@@ -51,6 +48,13 @@ class ExampleWrapper(object):
         # Turn JSON into a dictionary.
         return json.loads(data)
 
+
+class Example(API):
+
+    def __init__(self, api_key=''):
+        super(Example, self).__init__(api_key)
+        self.base_url = 'http://something.web'
+
     def example(self, **kwargs):
         """An example method using the api method."""
-        return self.api('example', **kwargs)
+        return self.call_api('example', **kwargs)

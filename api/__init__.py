@@ -1,5 +1,5 @@
 #!/usr/bin/env python
 
-from api import ExampleWrapper
+from api import Example
 
-__all__ = [ExampleWrapper]
+__all__ = [Example]
