@@ -1,5 +1,5 @@
 #!/usr/bin/env python
 
-from api import Example
+from api import API
 
-__all__ = [Example]
+__all__ = [API]

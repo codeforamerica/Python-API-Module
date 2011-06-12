@@ -47,14 +47,3 @@ class API(object):
         data = urlopen(url).read()
         # Turn JSON into a dictionary.
         return json.loads(data)
-
-
-class Example(API):
-
-    def __init__(self, api_key=''):
-        super(Example, self).__init__(api_key)
-        self.base_url = 'http://something.web'
-
-    def example(self, **kwargs):
-        """An example method using the api method."""
-        return self.call_api('example', **kwargs)
