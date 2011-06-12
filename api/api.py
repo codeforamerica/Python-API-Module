@@ -38,8 +38,7 @@ class API(object):
         A generic example api wrapping method. Other methods can use this
         method to interact with the API.
         """
-        url_list = [self.base_url]
-        url_list.append('/%s' % directory)
+        url_list = [self.base_url, '/%s' % directory]
         kwargs.update({'api_key': self.api_key})
         params = urlencode(kwargs)
         url_list.extend(['?', params])
