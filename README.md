@@ -36,37 +36,13 @@ Current third-party libraries we're using include:
     test.py:12:1: E302 expected 2 blank lines, found 1
 </code></pre>
 
-* `fabric` -- Adjust the directory structure accordingly to new API.
-<pre><code>
-    $ fab create:example_api
-</code></pre>
-
-
-Using Fabric
-------------
-
-The included fabfile can help reformat the `api` directory to fit the
-actual API you're beginning to work on.
-
-For example, if you're starting to write a Python wrapper for an
-imaginary Census API, you could do the following:
-
-<pre><code>
-    $ fab create:census_api
-</code></pre>
-
-This will execute the commands in the `fabfile` if the `fabric` Python
-library is installed on your computer. While the `fabfile` currently
-performs only a few operations, it can easily be extended to include
-more functionality.
-
 
 Instructions
 ------------
 
-1. Read through the `api` directory and tests.
-2. Use `fabric` to modify the `api` directory.
-3. Rewrite tests and files accordingly.
+1. Read through the `api` and `tests` directories.
+2. Read through files in the `examples` directory.
+3. Write tests and new API wrappers accordingly.
 
 
 Copyright
