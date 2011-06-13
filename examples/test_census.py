@@ -7,7 +7,7 @@ import unittest
 from mock import Mock
 
 from api import api
-from usa_today import Census
+from census import Census
 
 
 def set_up_method_tests():
