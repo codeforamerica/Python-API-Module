@@ -16,6 +16,7 @@ class Fred(API):
     def __init__(self, api_key=''):
         super(Fred, self).__init__(api_key)
         self.base_url = 'http://api.stlouisfed.org/fred'
+        self.output_format = 'xml'
 
     def _resolve_url(self, directory, child=None, **kwargs):
         """Internal method to resolve URL structure."""
