@@ -10,11 +10,12 @@ from .xml2dict import XML2Dict, Dict2XML
 
 def xml2dict(data):
     converter = XML2Dict()
-    
+
     if hasattr(data, 'read'):
         data = data.read()
-    
+
     return converter.fromstring(data)
+
 
 def dict2xml(data):
     converter = Dict2XML()
