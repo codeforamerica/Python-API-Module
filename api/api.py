@@ -22,6 +22,7 @@ except ImportError:  # pragma: no cover
 
 # Maybe modules should import their own API key.
 from api_key import API_KEY
+from xml2dict import xml2dict
 
 
 class API(object):
@@ -57,4 +58,13 @@ class API(object):
         if output_format == 'json':
             # Turn JSON into a dictionary.
             return json.loads(data)
+        elif output_format == 'xml':
+            return self._xml_to_dict(data)
         return data
+
+    def _xml_to_dict(self, xml):
+        """
+        Internal method to turn XML to dictionary output. Developers can
+        overwrite this method to use their favorite XML parser of choice.
+        """
+        return xml2dict(xml)
