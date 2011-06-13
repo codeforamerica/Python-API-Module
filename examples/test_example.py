@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
-"""Unit tests for Python API wrapper."""
+"""Unit tests for Python Example API wrapper."""
 
 import unittest
 
 from mock import Mock
 
 from api import api
-from api import Example
+from example import Example
 
 
 def set_up_tests():
