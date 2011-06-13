@@ -1,7 +1,11 @@
 Python API Template
 ===================
 
-A generic template for Python API wrappers.
+A generic template for creating Python API wrappers.
+
+
+Third Party Libraries
+---------------------
 
 Current third-party libraries we're using include:
 
@@ -42,6 +46,7 @@ Instructions
 
 1. Read through the `api` and `tests` directories.
 2. Read through files in the `examples` directory.
+  * This is where you'll see how to properly subclass the `API` class.
 3. Write tests and new API wrappers accordingly.
 
 
