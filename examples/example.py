@@ -12,6 +12,7 @@ class Example(API):
     def __init__(self, api_key=''):
         super(Example, self).__init__(api_key)
         self.base_url = 'http://something.web'
+        self.output_format = 'json'
         if not self.api_key:
             self.api_key = API_KEY
 

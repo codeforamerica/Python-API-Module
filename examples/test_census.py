@@ -42,29 +42,37 @@ class TestCallApiMethod(unittest.TestCase):
     def setUp(self):
         set_up_method_tests()
 
-    def test_empty_api_method_fails(self):
+    def test_empty_call_api_method_fails(self):
         self.assertRaises(TypeError, Census().call_api)
 
-    def test_api_method_with_locations_arg(self):
+    def test_call_api_method_with_locations_arg(self):
         Census().call_api('locations')
         url = called_url()
         expected_url = ('http://api.usatoday.com/open/census/'
                         'locations?api_key=my_fake_api_key')
         self.assertEquals(url, expected_url)
 
-    def test_api_method_with_multiple_args(self):
+    def test_call_api_method_with_multiple_args(self):
         Census().call_api('testing', hello='world')
         url = called_url()
         expected_url = ('http://api.usatoday.com/open/census/'
                         'testing?api_key=my_fake_api_key&hello=world')
         self.assertEquals(url, expected_url)
 
-    def test_api_method_with_new_api_key(self):
+    def test_call_api_method_with_new_api_key(self):
         Census('new_api_key').call_api('testing', hello='world')
         url = called_url()
         expected_url = ('http://api.usatoday.com/open/census/'
                         'testing?api_key=new_api_key&hello=world')
         self.assertEquals(url, expected_url)
+
+    def test_call_api_without_output_formatting(self):
+        Census().call_api('test', output_format=None)
+        url = called_url()
+        expected_url = ('http://api.usatoday.com/open/census/'
+                        'test?api_key=my_fake_api_key')
+        self.assertEquals(url, expected_url)
+
 
 
 class TestLocationMethod(unittest.TestCase):

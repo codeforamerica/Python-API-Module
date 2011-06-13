@@ -9,6 +9,7 @@ class Census(API):
     def __init__(self, api_key=''):
         super(Census, self).__init__(api_key)
         self.base_url = 'http://api.usatoday.com/open/census'
+        self.output_format = 'json'
 
     def _resolve_url(self, directory, keypat=None, **kwargs):
         """Internal method to resolve URL structure."""

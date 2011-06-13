@@ -64,6 +64,13 @@ class TestCallApiMethod(unittest.TestCase):
                         'example?api_key=fake_api_key&hello=world')
         self.assertEquals(url, expected_url)
 
+    def test_call_api_method_without_output_format(self):
+        Example().call_api('example', output_format=None)
+        url = called_url()
+        expected_url = ('http://something.web/'
+                        'example?api_key=fake_api_key')
+        self.assertEquals(url, expected_url)
+
 
 class TestExampleMethod(unittest.TestCase):
 
