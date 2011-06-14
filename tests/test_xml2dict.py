@@ -3,9 +3,10 @@
 """Unit tests for the xml2dict module."""
 
 import unittest
+import tempfile
 
 import api
-from api.xml2dict import xml2dict, object_dict, dict2xml
+from api.xml2dict import xml2dict, object_dict, dict2xml, XML2Dict
 
 import xml_strings
 
@@ -76,6 +77,22 @@ class TestXML2Dict(unittest.TestCase):
         xml = self.xml + '<a b="foo"><b><c>1</c></b></a>'
         expected_output = {'a': {'b': ['foo', {'c': '1'}]}}
         self.assertEquals(xml2dict(xml), expected_output)
+
+    def test_parsing_XML_from_file_from_function(self):
+        xml = self.xml + '<a foo="bar" hello="word" />'
+        f = tempfile.TemporaryFile(mode="w+t")
+        f.write(xml)
+        f.seek(0)
+        expected_output = {'a': {'foo': 'bar', 'hello': 'word'}}
+        self.assertEquals(xml2dict(f), expected_output)
+
+    def test_parsing_XML_from_file_with_parse_method(self):
+        xml = self.xml + '<a foo="bar" hello="word" />'
+        f = tempfile.NamedTemporaryFile(mode="w+t")
+        f.write(xml)
+        f.seek(0)
+        expected_output = {'a': {'foo': 'bar', 'hello': 'word'}}
+        self.assertEquals(XML2Dict().parse(f.name), expected_output)
 
 
 class TestDict2XML(unittest.TestCase):
