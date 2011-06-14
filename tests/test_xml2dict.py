@@ -5,16 +5,32 @@
 import unittest
 
 import api
-from api.xml2dict import xml2dict
+from api.xml2dict import xml2dict, object_dict, dict2xml
 
-# XML Strings
 import xml_strings
+
+
+class TestObjectDict(unittest.TestCase):
+
+    def test_object_dict(self):
+        od = object_dict()
+        od.fish = 'fish'
+        self.assertEquals(od['fish'], 'fish')
+
+    def test_object_dict_of_object_dict(self):
+        od = object_dict()
+        od.test_one = {'value': 1}
+        od.test_two = object_dict({'name': 'test_two', 'value': 2})
+        self.assertEquals(od.test_one, 1)
+        self.assertEquals(od.test_two.name, 'test_two')
+        self.assertEquals(od.test_two.value, 2)
+        self.assertEquals(od.test_two, {'name': 'test_two', 'value': 2})
 
 
 class TestXML2Dict(unittest.TestCase):
 
     def setUp(self):
-        self.xml = '<?xml version="1.0" encoding="utf-8" ?>'
+        self.xml = '<?xml version="1.0" encoding="UTF-8" ?>\n'
 
     def test_simple_xml_to_dict(self):
         xml = self.xml + '<a><b>5</b><c>9</c></a>'
@@ -60,6 +76,38 @@ class TestXML2Dict(unittest.TestCase):
         xml = self.xml + '<a b="foo"><b><c>1</c></b></a>'
         expected_output = {'a': {'b': ['foo', {'c': '1'}]}}
         self.assertEquals(xml2dict(xml), expected_output)
+
+
+class TestDict2XML(unittest.TestCase):
+
+    def setUp(self):
+        self.xml = '<?xml version="1.0" encoding="UTF-8" ?>\n'
+
+    def test_dict2xml_fails_when_passed_a_list(self):
+        self.assertRaises(TypeError, dict2xml, [])
+
+    def test_dict2xml_fails_when_passed_more_than_one_root_node(self):
+        my_dict = {'a': 1, 'b': 2}
+        self.assertRaises(ValueError, dict2xml, my_dict)
+
+    def test_simple_dictionary_to_XML(self):
+        my_dict = {'a': {'b': '5', 'c': '9'}}
+        expected_xml = self.xml + '<a><c><![CDATA[9]]></c><b><![CDATA[5]]></b></a>'
+        self.assertEquals(dict2xml(my_dict), expected_xml)
+
+    def test_dictionary_with_list_to_XML(self):
+        my_dict = {'a': {'b': ['1', '2', '3']}}
+        expected_xml = self.xml + ('<a><b><![CDATA[1]]></b>'
+                                   '<b><![CDATA[2]]></b>'
+                                   '<b><![CDATA[3]]></b></a>')
+        self.assertEqual(dict2xml(my_dict), expected_xml)
+
+    def test_mixture_of_dictionaries_and_lists_to_XML(self):
+        my_dict = {'a': {'b': ['1', '2'], 'c': {'d': '3'}}}
+        expected_xml = self.xml + ('<a><c><d><![CDATA[3]]></d></c>'
+                                   '<b><![CDATA[1]]></b><b><![CDATA[2]]></b>'
+                                   '</a>')
+        self.assertEquals(dict2xml(my_dict), expected_xml)
 
 
 if __name__ == '__main__':

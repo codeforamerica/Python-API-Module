@@ -7,7 +7,7 @@ Provided as-is; use at your own risk; no warranty; no promises; enjoy!
 """
 
 class object_dict(dict):
-    """object view of dict, you can 
+    """Object view of dict, you can.
     >>> a = object_dict()
     >>> a.fish = 'fish'
     >>> a['fish']
@@ -20,6 +20,7 @@ class object_dict(dict):
     >>> a.test, a.test2.name, a.test2.value
     (1, 'test2', 2)
     """
+
     def __init__(self, initd=None):
         if initd is None:
             initd = {}
@@ -35,11 +36,3 @@ class object_dict(dict):
 
     def __setattr__(self, item, value):
         self.__setitem__(item, value)
-
-
-def _test():
-    import doctest
-    doctest.testmod()
-
-if __name__ == "__main__":
-    _test()

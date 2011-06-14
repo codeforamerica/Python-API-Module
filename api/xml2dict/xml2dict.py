@@ -2,6 +2,9 @@
 
 """Thunder Chen<nkchenz@gmail.com> 2007.9.1"""
 
+from __future__ import with_statement
+import re
+
 try:
     import xml.etree.ElementTree as ET
 except:  # pragma: no cover
@@ -9,7 +12,6 @@ except:  # pragma: no cover
     import cElementTree as ET
 
 from object_dict import object_dict
-import re
 
 
 class XML2Dict(object):
@@ -22,7 +24,8 @@ class XML2Dict(object):
                                  "tag name. Check the documentation.")
             node.attrib.update({node.tag: node.text})
             node.text = ''
-        # Save attrs and text, hope there will not be a child with same name
+        # Save attrs and text. Fair warning, if there's a child node with the same name
+        # as an attribute, values will become a list.
         if node.text and node.text.strip():
             node_tree = node.text
         else:
@@ -32,14 +35,15 @@ class XML2Dict(object):
             # Save children.
             for child in node.getchildren():
                 tag, tree = self._namespace_split(child.tag, self._parse_node(child))
-                if tag not in node_tree:  # the first time, so store it in dict
+                if tag not in node_tree:  # First encounter, store it in dict.
                     node_tree[tag] = tree
                     continue
                 old = node_tree[tag]
                 if not isinstance(old, list):
+                    # Multiple encounters, change dict to a list
                     node_tree.pop(tag)
-                    node_tree[tag] = [old]  # multi times, so change old dict to a list
-                node_tree[tag].append(tree)  # add the new one
+                    node_tree[tag] = [old]
+                node_tree[tag].append(tree)  # Add the new one.
         if not node_tree:
             node_tree = None
         return node_tree
@@ -53,13 +57,13 @@ class XML2Dict(object):
         result = re.compile("\{(.*)\}(.*)").search(tag)
         if result:
             tag = result.groups(1)
-            #value.namespace, tag = result.groups()
+            # value.namespace, tag = result.groups()
         return (tag, value)
 
     def parse(self, file):
         """Parse an XML file to a dict."""
-        f = open(file, 'r')
-        return self.fromstring(f.read())
+        with open(file, 'r') as f:
+            return self.fromstring(f.read())
 
     def fromstring(self, s):
         """Parse a string."""
@@ -69,9 +73,10 @@ class XML2Dict(object):
 
 
 class Dict2XML(object):
+    """Turn a dictionary into an XML string."""
 
     def tostring(self, d):
-        """convert dictionary to xml string"""
+        """Convert dictionary to an XML string."""
         if not isinstance(d, dict):
             raise TypeError('tostring must receive a dictionary: %r' % d)
         if len(d) != 1:
@@ -79,7 +84,7 @@ class Dict2XML(object):
         if isinstance(d.itervalues().next(), list):
             raise ValueError('Dictionary must not be a map to list: %r' % d)
 
-        xml_list = ['<?xml version="1.0" encoding="UTF-8"?>\n']
+        xml_list = ['<?xml version="1.0" encoding="UTF-8" ?>\n']
         xml_list.append(self.__tostring_helper(d))
         return ''.join(xml_list)
 
