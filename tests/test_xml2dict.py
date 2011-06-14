@@ -90,6 +90,28 @@ class TestDict2XML(unittest.TestCase):
         my_dict = {'a': 1, 'b': 2}
         self.assertRaises(ValueError, dict2xml, my_dict)
 
+    def test_dict2xml_fails_when_node_child_is_a_list(self):
+        my_dict = {'a': [1, 2, 3]}
+        self.assertRaises(ValueError, dict2xml, my_dict)
+
+    def test_dict2xml_fails_when_passed_object_dictionary(self):
+        self.assertRaises(ValueError, dict2xml, {'a': object()})
+
+    def test_dict2xml_output_against_int_dictionary(self):
+        my_dict = {1: 2}
+        expected_xml = self.xml + '<1>2</1>'
+        self.assertEquals(dict2xml(my_dict), expected_xml)
+
+    def test_dict2xml_output_against_None_key(self):
+        my_dict = {'a': None}
+        expected_xml = self.xml + '<a />'
+        self.assertEquals(dict2xml(my_dict), expected_xml)
+
+    def test_dict2xml_output_against_child_list_of_None_values(self):
+        my_dict = {'a': {'b': [None, None, None]}}
+        expected_xml = self.xml + '<a><b /><b /><b /></a>'
+        self.assertEquals(dict2xml(my_dict), expected_xml)
+
     def test_simple_dictionary_to_XML(self):
         my_dict = {'a': {'b': '5', 'c': '9'}}
         expected_xml = self.xml + '<a><c><![CDATA[9]]></c><b><![CDATA[5]]></b></a>'
