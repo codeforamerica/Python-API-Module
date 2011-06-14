@@ -7,6 +7,9 @@ import unittest
 import api
 from api.xml2dict import xml2dict
 
+# XML Strings
+import xml_strings
+
 
 class TestXML2Dict(unittest.TestCase):
 
@@ -32,6 +35,31 @@ class TestXML2Dict(unittest.TestCase):
         xml = self.xml + '<numbers one="1" two="2" />'
         expected_output = {'numbers': {'one': '1', 'two': '2'}}
         self.assertEqual(xml2dict(xml), expected_output)
+
+    def test_both_attributes_and_child_nodes(self):
+        xml = self.xml + '<a foo="foo">bar</a>'
+        expected_output = {'a': {'a': 'bar', 'foo': 'foo'}}
+        self.assertEqual(xml2dict(xml), expected_output)
+
+    def test_error_raised_when_passed_complicated_XML(self):
+        xml = self.xml + '<tag tag="foo">bar</tag>'
+        self.assertRaises(ValueError, xml2dict, xml)
+
+    def test_against_XML_namespaces(self):
+        xml = self.xml + xml_strings.namespaces_table
+        expected_output = {
+            ('http://www.w3.org/TR/html4/', 'table'): {
+                ('http://www.w3.org/TR/html4/', 'tr'): {
+                    ('http://www.w3.org/TR/html4/', 'td'): ['Apples', 'Bananas']
+                }
+            }
+        }
+        self.assertEquals(xml2dict(xml), expected_output)
+
+    def test_node_attribute_has_same_name_as_child(self):
+        xml = self.xml + '<a b="foo"><b><c>1</c></b></a>'
+        expected_output = {'a': {'b': ['foo', {'c': '1'}]}}
+        self.assertEquals(xml2dict(xml), expected_output)
 
 
 if __name__ == '__main__':

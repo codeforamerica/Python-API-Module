@@ -16,6 +16,12 @@ class XML2Dict(object):
 
     def _parse_node(self, node):
         node_tree = object_dict()
+        if node.text and node.attrib:
+            if node.tag in node.attrib:
+                raise ValueError("Name conflict: Attribute name conflicts with "
+                                 "tag name. Check the documentation.")
+            node.attrib.update({node.tag: node.text})
+            node.text = ''
         # Save attrs and text, hope there will not be a child with same name
         if node.text and node.text.strip():
             node_tree = node.text
@@ -46,7 +52,8 @@ class XML2Dict(object):
         """
         result = re.compile("\{(.*)\}(.*)").search(tag)
         if result:
-            value.namespace, tag = result.groups()
+            tag = result.groups(1)
+            #value.namespace, tag = result.groups()
         return (tag, value)
 
     def parse(self, file):
