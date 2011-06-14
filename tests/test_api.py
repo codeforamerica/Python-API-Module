@@ -111,7 +111,24 @@ class ExampleXml(API):
         self.api_key = 'xml_api_key'
 
 
+class ExampleKeywords(API):
+
+    def __init__(self):
+        super(ExampleKeywords, self).__init__()
+        self.base_url = 'http://example.com'
+        self.output_format = 'json'
+        self.required_params = {'foo': 'bar'}
+
+
 class TestExamples(unittest.TestCase):
+
+    def setUp(self):
+        api.urlopen = Mock()
+        api.json = Mock()
+
+    def tearDown(self):
+        import json
+        api.json = json
 
     def test_example_json_api(self):
         example = ExampleJson()
@@ -124,6 +141,12 @@ class TestExamples(unittest.TestCase):
         self.assertEquals(example.api_key, 'xml_api_key')
         self.assertEquals(example.base_url, 'http://example.com')
         self.assertEquals(example.output_format, 'xml')
+
+    def test_example_with_new_required_params(self):
+        example = ExampleKeywords()
+        example.call_api('test')
+        expected_url = 'http://example.com/test?foo=bar'
+        api.urlopen.assert_called_with(expected_url)
 
 
 if __name__ == '__main__':

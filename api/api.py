@@ -35,6 +35,7 @@ class API(object):
             self.api_key = api_key
         self.base_url = ''
         self.output_format = None
+        self.required_params = {'api_key': self.api_key}
 
     def call_api(self, directory, **kwargs):
         """
@@ -42,11 +43,11 @@ class API(object):
         method to interact with the API.
         """
         url_list = [self.base_url, '/%s' % directory]
-        kwargs.update({'api_key': self.api_key})
         try:
             output_format = kwargs.pop('output_format')
         except KeyError:
             output_format = self.output_format
+        kwargs.update(self.required_params)
         params = urlencode(kwargs)
         url_list.extend(['?', params])
         url = ''.join(url_list)
