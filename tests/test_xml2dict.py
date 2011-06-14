@@ -5,8 +5,10 @@
 import unittest
 import tempfile
 
+from mock import Mock
+
 import api
-from api.xml2dict import xml2dict, object_dict, dict2xml, XML2Dict
+from api.xml2dict import object_dict, xml2dict, dict2xml, XML2Dict
 
 import xml_strings
 
@@ -18,14 +20,17 @@ class TestObjectDict(unittest.TestCase):
         od.fish = 'fish'
         self.assertEquals(od['fish'], 'fish')
 
+    def test_object_dict_returns_value(self):
+        od = object_dict()
+        od.test = {'value': 1}
+        self.assertEquals(od.test, 1)
+
     def test_object_dict_of_object_dict(self):
         od = object_dict()
-        od.test_one = {'value': 1}
-        od.test_two = object_dict({'name': 'test_two', 'value': 2})
-        self.assertEquals(od.test_one, 1)
-        self.assertEquals(od.test_two.name, 'test_two')
-        self.assertEquals(od.test_two.value, 2)
-        self.assertEquals(od.test_two, {'name': 'test_two', 'value': 2})
+        od.test = object_dict({'name': 'test_two', 'value': 2})
+        self.assertEquals(od.test.name, 'test_two')
+        self.assertEquals(od.test.value, 2)
+        self.assertEquals(od.test, {'name': 'test_two', 'value': 2})
 
 
 class TestXML2Dict(unittest.TestCase):
