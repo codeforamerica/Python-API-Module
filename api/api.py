@@ -43,7 +43,8 @@ class API(object):
         method to interact with the API.
         """
         url_list = [self.base_url, '/%s' % directory]
-        kwargs.update(self.required_params)
+        if self.required_params:
+            kwargs.update(self.required_params)
         try:
             output_format = kwargs.pop('output_format')
         except KeyError:
