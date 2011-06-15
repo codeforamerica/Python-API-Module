@@ -63,36 +63,6 @@ class TestFormatDataMethod(unittest.TestCase):
         self.assertEquals(output, data)
 
 
-class TestXmlToDictMethod(unittest.TestCase):
-
-    def setUp(self):
-        self.xml = '<?xml version="1.0" encoding="utf-8" ?>'
-
-    def test_simple_xml_to_dict(self):
-        xml = self.xml + '<a><b>5</b><c>9</c></a>'
-        expected_output = {'a': {'b': '5', 'c': '9'}}
-        output = API()._xml_to_dict(xml)
-        self.assertEqual(output, expected_output)
-
-    def test_xml_to_list_of_values(self):
-        xml = self.xml + '<a><b>1</b><b>2</b><b>3</b></a>'
-        expected_output = {'a': {'b': ['1', '2', '3']}}
-        output = API()._xml_to_dict(xml)
-        self.assertEqual(output, expected_output)
-
-    def test_xml_to_mixture_of_lists_and_dicts(self):
-        xml = self.xml + '<a><b>1</b><b>2</b><c><d>3</d></c></a>'
-        expected_output = {'a': {'b': ['1', '2'], 'c': {'d': '3'}}}
-        output = API()._xml_to_dict(xml)
-        self.assertEqual(output, expected_output)
-
-    def test_xml_attributes_retained(self):
-        xml = self.xml + '<numbers one="1" two="2" />'
-        expected_output = {'numbers': {'one': '1', 'two': '2'}}
-        output = API()._xml_to_dict(xml)
-        self.assertEqual(output, expected_output)
-
-
 class ExampleJson(API):
 
     def __init__(self, api_key=''):
