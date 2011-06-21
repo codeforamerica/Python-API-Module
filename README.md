@@ -1,7 +1,94 @@
 Python API Template
 ===================
 
-A generic template for creating Python API wrappers.
+A base class used for creating Python API wrappers.
+
+
+Usage
+-----
+
+The `minimal` branch should be used as a `git submodule` when creating
+new Python API wrappers. So, while development takes place on the
+`master` branch, most individuals will just end up using the `minimal`
+branch.
+
+Let's make a new Python API with this in mind.
+
+Start by creating your API directory.
+
+    $ mkdir my_python_api && cd my_python_api
+    $ touch README.md
+
+Next, let's `git init` our new API.
+
+    $ git init
+
+Now we can add our `git submodule`.
+
+    $ git submodule add -b minimal git://github.com/codeforamerica/Python-API-Template.git api
+
+The `minimal` branch of our `Python API` should now be in the `api` directory.
+We can now start on our new Python API wrapper -- let's add the
+following code to `my_python_wrapper.py`.
+
+    #!/usr/bin/env python
+
+    """My new Python API wrapper."""
+
+    from api import API
+
+    class Wrapper(API):
+
+        def __init__(self):
+            super(Wrapper, self).__init__()
+            self.base_url = "http://api.wrappersite.com"
+            self.output_format = 'json'
+            self.required_params = {'foo': 'bar'}
+
+        def hello_world(self, **kwargs):
+            """Call the `hello_world` URL path for my API."""
+            self.call_api('hello_world', **kwargs)
+
+
+Now, let's use our new Python API wrapper from the interactive Python
+console.
+
+    >>> from my_python_wrapper import Wrapper
+    >>> wrap = Wrapper()
+    >>> wrap.hello_world()
+    'http://api.wrappersite.com/hello_world?foo=bar'
+
+While the `hello_world` won't return that URL -- it will actually try to
+open it with Python's `urlopen` function -- you should take a look at
+the URL called. By adding the `self.required_params` to your API, those
+parameters will now be used on every URL called.
+
+Want to see something else cool? We can pass in arbitrary keywords to
+our `hello_world` method, and they too will be added as URL parameters.
+
+    >>> wrap.hello_world(api_key='my_api_key')
+    'http://api.wrappersite.com/hello_world?foo=bar&api_key=my_api_key'
+
+Again, while the `hello_world` method won't actually return this URL
+string -- it will actually try to call it -- it's definitely useful to
+see how the `api_key` keyword argument was added as a URL parameter.
+
+So, what happens if instead of converting the data we're getting back
+from these method calls, we really just want the intended output -- such
+as `json` or `xml`?
+
+We can do this by adding the `output_format=None` keyword argument to our
+method call.
+
+    >>> data = wrap.hello_world()
+    >>> json_data = wrap.hello_world(output_format=None)
+
+Notice how XML output is also coerced to dictionary format with the
+`xml2dict` module.
+
+    >>> wrap.output_format = 'xml'
+    >>> data = wrap.hello_world()
+    >>> xml_data = wrap.hello_world(output_format=None)
 
 
 Third Party Libraries
