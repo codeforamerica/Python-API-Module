@@ -42,6 +42,7 @@ class API(object):
         A generic example api wrapping method. Other methods can use this
         method to interact with the API.
         """
+        self._check_base_url()
         url_list = [self.base_url, '/%s' % directory]
         if self.required_params:
             kwargs.update(self.required_params)
@@ -49,11 +50,19 @@ class API(object):
             output_format = kwargs.pop('output_format')
         except KeyError:
             output_format = self.output_format
-        params = urlencode(kwargs)
-        url_list.extend(['?', params])
+        if kwargs:
+            params = urlencode(kwargs)
+            url_list.extend(['?', params])
         url = ''.join(url_list)
         data = urlopen(url).read()
         return self._format_data(output_format, data)
+
+    def _check_base_url(self):
+        """Internal method to format `self.base_url`."""
+        base_url = self.base_url
+        if base_url and base_url.endswith('/'):
+            base_url = base_url.rstrip('/')
+            self.base_url = base_url
 
     def _format_data(self, output_format, data):
         """Internal method to return formatted data to developer."""
