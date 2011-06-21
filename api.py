@@ -37,13 +37,15 @@ class API(object):
         self.output_format = None
         self.required_params = {'api_key': self.api_key}
 
-    def call_api(self, directory, **kwargs):
+    def call_api(self, directory=None, **kwargs):
         """
         A generic example api wrapping method. Other methods can use this
         method to interact with the API.
         """
         self._check_base_url()
-        url_list = [self.base_url, '/%s' % directory]
+        url_list = [self.base_url]
+        if directory:
+            url_list.append('/%s' % directory)
         if self.required_params:
             kwargs.update(self.required_params)
         try:
