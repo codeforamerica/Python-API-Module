@@ -31,32 +31,36 @@ The `minimal` branch of our `Python API` should now be in the `api` directory.
 We can now start on our new Python API wrapper -- let's add the
 following code to `my_python_wrapper.py`.
 
-    #!/usr/bin/env python
+```python
+#!/usr/bin/env python
 
-    """My new Python API wrapper."""
+"""My new Python API wrapper."""
 
-    from api import API
+from api import API
 
-    class Wrapper(API):
+class Wrapper(API):
 
-        def __init__(self):
-            super(Wrapper, self).__init__()
-            self.base_url = "http://api.wrappersite.com"
-            self.output_format = 'json'
-            self.required_params = {'foo': 'bar'}
+    def __init__(self):
+        super(Wrapper, self).__init__()
+        self.base_url = "http://api.wrappersite.com"
+        self.output_format = 'json'
+        self.required_params = {'foo': 'bar'}
 
-        def hello_world(self, **kwargs):
-            """Call the `hello_world` URL path for my API."""
-            self.call_api('hello_world', **kwargs)
+    def hello_world(self, **kwargs):
+        """Call the `hello_world` URL path for my API."""
+        self.call_api('hello_world', **kwargs)
+```
 
 
 Now, let's use our new Python API wrapper from the interactive Python
 console.
 
+```python
     >>> from my_python_wrapper import Wrapper
     >>> wrap = Wrapper()
     >>> wrap.hello_world()
     'http://api.wrappersite.com/hello_world?foo=bar'
+```
 
 While the `hello_world` won't return that URL -- it will actually try to
 open it with Python's `urlopen` function -- you should take a look at
@@ -66,8 +70,10 @@ parameters will now be used on every URL called.
 Want to see something else cool? We can pass in arbitrary keywords to
 our `hello_world` method, and they too will be added as URL parameters.
 
+```python
     >>> wrap.hello_world(api_key='my_api_key')
     'http://api.wrappersite.com/hello_world?foo=bar&api_key=my_api_key'
+```
 
 Again, while the `hello_world` method won't actually return this URL
 string -- it will actually try to call it -- it's definitely useful to
@@ -80,15 +86,19 @@ as `json` or `xml`?
 We can do this by adding the `output_format=None` keyword argument to our
 method call.
 
+```python
     >>> data = wrap.hello_world()
     >>> json_data = wrap.hello_world(output_format=None)
+```
 
 Notice how XML output is also coerced to dictionary format with the
 `xml2dict` module.
 
+```python
     >>> wrap.output_format = 'xml'
     >>> data = wrap.hello_world()
     >>> xml_data = wrap.hello_world(output_format=None)
+```
 
 
 Third Party Libraries
@@ -126,15 +136,6 @@ Current third-party libraries we're using include:
     $ pep8 test.py
     test.py:12:1: E302 expected 2 blank lines, found 1
 </code></pre>
-
-
-Instructions
-------------
-
-1. Read through the `api` and `tests` directories.
-2. Read through files in the `examples` directory.
-  * This is where you'll see how to properly subclass the `API` class.
-3. Write tests and new API wrappers accordingly.
 
 
 Copyright
