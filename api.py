@@ -20,8 +20,6 @@ except ImportError:  # pragma: no cover
     # For Python 3.
     from urllib.request import urlopen
 
-# Maybe modules should import their own API key.
-from api_key import API_KEY
 from xml2dict import xml2dict
 
 
@@ -29,13 +27,11 @@ class API(object):
     """An example class for a Python API wrapper."""
 
     def __init__(self, api_key=''):
-        if not api_key:
-            self.api_key = API_KEY
-        else:
+        if api_key:
             self.api_key = api_key
         self.base_url = ''
         self.output_format = None
-        self.required_params = {'api_key': self.api_key}
+        self.required_params = None
 
     def call_api(self, directory=None, **kwargs):
         """
