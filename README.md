@@ -1,18 +1,15 @@
-Python API Template
-===================
+Python API Module
+=================
 
-A base class used for creating Python API wrappers.
+A base class and submodule used for creating Python API wrappers.
 
 
 Usage
 -----
 
-The `minimal` branch should be used as a `git submodule` when creating
-new Python API wrappers. So, while development takes place on the
-`master` branch, most individuals will just end up using the `minimal`
-branch.
-
-Let's make a new Python API with this in mind.
+This repository is designed to be used as a `git submodule` for all
+Python API wrappers going forward. With this in mind, let's look at how
+we'd set up a new Python API wrapper.
 
 Start by creating your API directory.
 
@@ -25,11 +22,11 @@ Next, let's `git init` our new API.
 
 Now we can add our `git submodule`.
 
-    $ git submodule add -b minimal git://github.com/codeforamerica/Python-API-Template.git api
+    $ git submodule add git://github.com/codeforamerica/Python-API-Module.git api
 
-The `minimal` branch of our `Python API` should now be in the `api` directory.
-We can now start on our new Python API wrapper -- let's add the
-following code to `my_python_wrapper.py`.
+This repository should now be in our new `api` directory. We can now start
+on our new Python API wrapper -- let's add the following code to the
+file `my_python_wrapper.py`.
 
 ```python
 #!/usr/bin/env python
