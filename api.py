@@ -64,6 +64,9 @@ class API(object):
 
     def _format_data(self, output_format, data):
         """Internal method to return formatted data to developer."""
+        if output_format:
+            # Check for cases people capitalize JSON or XML.
+            output_format =  output_format.lower()
         if output_format == 'json':
             # Turn JSON into a dictionary.
             return json.loads(data)
