@@ -24,9 +24,14 @@ Now we can add our `git submodule`.
 
     $ git submodule add git://github.com/codeforamerica/Python-API-Module.git api
 
-This repository should now be in our new `api` directory. We can now start
-on our new Python API wrapper -- let's add the following code to the
-file `my_python_wrapper.py`.
+This repository should now be in our new `api` directory. Let's update the
+`xml2dict` submodule that's stored in it.
+
+    $ cd api
+    $ git submodule init && git submodule update
+
+We can now start on our new Python API wrapper -- let's add the
+following code to the file `my_python_wrapper.py`.
 
 ```python
 #!/usr/bin/env python
