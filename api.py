@@ -2,25 +2,11 @@
 
 """Python wrapper for an API."""
 
-try:
-    import json
-except ImportError:  # pragma: no cover
-    # For older versions of Python.
-    import simplejson as json
+import json
+from urllib.parse import urlencode
+from urllib.request import urlopen
 
-try:
-    from urllib import urlencode
-except ImportError:  # pragma: no cover
-    # For Python 3.
-    from urllib.parse import urlencode
-
-try:
-    from urllib2 import urlopen
-except ImportError:  # pragma: no cover
-    # For Python 3.
-    from urllib.request import urlopen
-
-from xml2dict import xml2dict
+from .xml2dict import xml2dict
 
 
 class API(object):
@@ -66,7 +52,7 @@ class API(object):
         """Internal method to return formatted data to developer."""
         if output_format:
             # Check for cases people capitalize JSON or XML.
-            output_format =  output_format.lower()
+            output_format = output_format.lower()
         if output_format == 'json':
             # Turn JSON into a dictionary.
             return json.loads(data)
